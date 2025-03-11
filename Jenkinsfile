@@ -2,27 +2,46 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/khairunnisaalallah/laravel-dev'
+                script {
+                    echo 'Checking out repository...'
+                    git branch: 'main', url: 'https://github.com/khairunnisaalallah/laravel-dev'
+                }
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                sh 'composer install --no-interaction --prefer-dist --optimize-autoloader'
+                script {
+                    echo 'Building application...'
+                    // Tambahkan perintah build jika diperlukan, misalnya:
+                    // sh './gradlew build'  (untuk Gradle)
+                    // sh 'mvn package'      (untuk Maven)
+                    // sh 'npm install'      (untuk Node.js)
+                }
             }
         }
 
-        stage('Run Migrations') {
+        stage('Test') {
             steps {
-                sh 'php artisan migrate --force'
+                script {
+                    echo 'Running tests...'
+                    // Tambahkan perintah untuk menjalankan unit test
+                    // sh 'npm test'
+                    // sh './gradlew test'
+                }
             }
         }
 
-        stage('Run Tests') {
+        stage('Deploy') {
             steps {
-                sh 'php artisan test'
+                script {
+                    echo 'Deploying application...'
+                    // Tambahkan perintah untuk deploy ke server atau container
+                    // sh 'scp target/app.jar user@server:/path/to/deploy'
+                    // sh 'docker-compose up -d'
+                }
             }
         }
     }
