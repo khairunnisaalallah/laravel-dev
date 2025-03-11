@@ -1,18 +1,29 @@
-node {
-    checkout scm
+pipeline {
+    agent any
 
-    // Deploy environment dev
-    stage("Build") {
-        docker.image('shippingdocker/php-composer:7.4').inside('-u root') {
-            sh 'rm composer.lock'
-            sh 'composer install'
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/khairunnisaalallah/laravel-dev'
+            }
         }
-    }
 
-    // Testing
-    stage("Test") {
-        docker.image('ubuntu').inside('-u root') {
-            sh 'echo "Ini adalah test"'
+        stage('Install Dependencies') {
+            steps {
+                sh 'composer install --no-interaction --prefer-dist --optimize-autoloader'
+            }
+        }
+
+        stage('Run Migrations') {
+            steps {
+                sh 'php artisan migrate --force'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'php artisan test'
+            }
         }
     }
 }
