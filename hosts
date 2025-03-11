@@ -1,0 +1,5 @@
+[development]
+172.20.212.133 ansible_user=anisa ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[production]
+172.20.212.133 ansible_user=anisa ansible_ssh_private_key_file=~/.ssh/id_rsa
